@@ -1,0 +1,23 @@
+{
+  "name": "back-end",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/api/server.js",
+    "dev": "nodemon src/api/server.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "4.17.1",
+    "lodash": "^4.17.21",
+    "puppeteer": "^19.9.0",
+    "puppeteer-autoscroll-down": "^1.1.2"
+  },
+  "devDependencies": {
+    "nodemon": "2.0.15"
+  }
+}
