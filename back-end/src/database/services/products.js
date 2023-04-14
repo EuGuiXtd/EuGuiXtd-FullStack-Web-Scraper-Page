@@ -1,95 +1,109 @@
-const puppeteer = require('puppeteer');
-const { scrollPageToBottom } = require('puppeteer-autoscroll-down');
-const { Search } = require('../models');
-const _ = require('lodash');
+const puppeteer = require("puppeteer");
+const { scrollPageToBottom } = require("puppeteer-autoscroll-down");
+const { Search } = require("../models");
+const _ = require("lodash");
 
-async function getMercadoLivre(searchStr,category) {
-  const browser = await puppeteer.launch()//{headless: false});
+async function getMercadoLivre(searchStr, category) {
+  const browser = await puppeteer.launch();
   const page = await browser.newPage();
-  console.log('iniciei');
 
   await page.goto(`https://lista.mercadolivre.com.br/${category}`);
-  console.log('fui pra url');
 
-  await page.setViewport({width: 1080, height: 1024});
+  await page.setViewport({ width: 1080, height: 1024 });
 
-  const search = '.nav-search-input'
-  const searchBtn = '.nav-search-btn';
-  const check = 'p > input'
+  const search = ".nav-search-input";
+  const searchBtn = ".nav-search-btn";
+  const check = "p > input";
 
   await page.waitForSelector(search);
 
-  await page.click(check)
+  await page.click(check);
   await page.focus(search);
-  await page.keyboard.down('Control');
-  await page.keyboard.press('A');
-  await page.keyboard.up('Control');
+  await page.keyboard.down("Control");
+  await page.keyboard.press("A");
+  await page.keyboard.up("Control");
   await page.type(search, searchStr);
-  await Promise.all([
-    page.waitForNavigation(),
-    await page.click(searchBtn),
-  ]);
+  await Promise.all([page.waitForNavigation(), await page.click(searchBtn)]);
 
   await scrollPageToBottom(page, {
     size: 250,
-    delay: 250
-  })
+    delay: 250,
+  });
 
-const links = await page.$$eval('.ui-search-layout__item.shops__layout-item', el => {
-  return el.map(link => ({
-    link: link.querySelector(".ui-search-link").href,
-    price: `$ ${link.querySelector(".ui-search-price__second-line.shops__price-second-line").querySelector(".price-tag-fraction").innerHTML}`,
-    image: link.querySelector("img").getAttribute('src'),
-    description: link.querySelector(".ui-search-item__title.shops__item-title").innerHTML
-}));
-});
-//console.log(links)
+  const links = await page.$$eval(
+    category === "tv"
+      ? ".ui-search-layout__item"
+      : ".ui-search-layout__item.shops__layout-item",
+    (el) => {
+      return el.map((link) => ({
+        link: link.querySelector(".ui-search-link").href,
+        price: `$ ${
+          link
+            .querySelector(
+              ".ui-search-price__second-line.shops__price-second-line"
+            )
+            .querySelector(".price-tag-fraction").innerHTML
+        }`,
+        image: link.querySelector("img").getAttribute("src"),
+        description: link.querySelector(
+          ".ui-search-item__title.shops__item-title"
+        ).innerHTML,
+      }));
+    }
+  );
   await browser.close();
   return links;
-};
+}
 
-async function getBuscape(searchStr,category) {
-    const browser = await puppeteer.launch()//{headless: false});
-    const page = await browser.newPage();
-  
-    await page.goto('https://www.buscape.com.br/');
-  
-    await page.setViewport({width: 1280, height: 926});
-  
-    const selectCategory = '.Dropdown_DropdownHeader__N3Zqc'
-    const input = '.AutoCompleteStyle_input__HG105.AutoCompleteStyle_textBox__MXJXH.AutoCompleteStyle_input__HG105'
-    if(category === 'celular')await page.$$eval('.Dropdown_DropdownOption__fl0dr', divs => divs.at(1).click());
-    if(category === 'geladeira')await page.$$eval('.Dropdown_DropdownOption__fl0dr', divs => divs.at(4).click());
-    if(category === 'tv')await page.$$eval('.Dropdown_DropdownOption__fl0dr', divs => divs.at(2).click());
-    await page.click(selectCategory)
-    await page.type(input, searchStr);
-    await page.focus(input);
-    await Promise.all([
-      page.waitForNavigation(),
-      page.keyboard.press('Enter'),
-    ]);
+async function getBuscape(searchStr, category) {
+  const browser = await puppeteer.launch();
+  const page = await browser.newPage();
 
-    await scrollPageToBottom(page, {
-      size: 250,
-      delay: 250
-    })
+  await page.goto("https://www.buscape.com.br/");
 
-  const products = await page.$$eval('.SearchCard_ProductCard_Inner__7JhKb', product => {
-    return product.map(product => ({
-      link: product.href,
-      price: product.querySelector(".Text_Text__h_AF6.Text_MobileHeadingS__Zxam2").innerHTML,
-      image: product.querySelector("img").getAttribute('src'),
-      description: product.querySelector("h2").innerHTML
-  }));
+  await page.setViewport({ width: 1280, height: 926 });
+
+  const selectCategory = ".Dropdown_DropdownHeader__N3Zqc";
+  const input =
+    ".AutoCompleteStyle_input__HG105.AutoCompleteStyle_textBox__MXJXH.AutoCompleteStyle_input__HG105";
+  if (category === "celular")
+    await page.$$eval(".Dropdown_DropdownOption__fl0dr", (divs) =>
+      divs.at(1).click()
+    );
+  if (category === "geladeira")
+    await page.$$eval(".Dropdown_DropdownOption__fl0dr", (divs) =>
+      divs.at(4).click()
+    );
+  if (category === "tv")
+    await page.$$eval(".Dropdown_DropdownOption__fl0dr", (divs) =>
+      divs.at(2).click()
+    );
+  await page.click(selectCategory);
+  await page.type(input, searchStr);
+  await page.focus(input);
+  await Promise.all([page.waitForNavigation(), page.keyboard.press("Enter")]);
+
+  await scrollPageToBottom(page, {
+    size: 250,
+    delay: 250,
   });
-//  console.log(products) 
-    await browser.close();
-    return products;
-  };
 
-
-
-
+  const products = await page.$$eval(
+    ".SearchCard_ProductCard_Inner__7JhKb",
+    (product) => {
+      return product.map((product) => ({
+        link: product.href,
+        price: product.querySelector(
+          ".Text_Text__h_AF6.Text_MobileHeadingS__Zxam2"
+        ).innerHTML,
+        image: product.querySelector("img").getAttribute("src"),
+        description: product.querySelector("h2").innerHTML,
+      }));
+    }
+  );
+  await browser.close();
+  return products;
+}
 
 const getProductsAndPostSearch = async (search, site, category) => {
   const searchVerify = await Search.findAll({
@@ -97,36 +111,56 @@ const getProductsAndPostSearch = async (search, site, category) => {
       search: search,
       category: category,
       site: site,
-    }
-  })
-  if(searchVerify.length){ 
+    },
+  });
+  if (searchVerify.length === 1) {
     return {
       type: null,
-      message: searchVerify
-    }
+      message: "Not found itens",
+    };
   }
-  let [productsMl,productsBp] = await Promise.all([
-      (site === 'Mercado Livre' || site === 'Ambos') ? getMercadoLivre(search, category) : [],
-      (site === 'Buscapé' || site === 'Ambos') ? getBuscape(search, category) : []
-  ])
-  const products =  _.concat(productsMl,productsBp);
-          const newSearch = products.map(async (product) => { 
-          await Search.create({ 
-              search: search,
-              category: category,
-              site: site,
-              link: product.link,
-              price: product.price,
-              image: product.image,
-              description: product.description }); 
-          }); Promise.all(newSearch);
-          console.log(products);
-  return {
+  if (searchVerify.length) {
+    return {
       type: null,
-      message: products
+      message: searchVerify,
+    };
+  }
+  let [productsMl, productsBp] = await Promise.all([
+    site === "Mercado Livre" || site === "Ambos"
+      ? getMercadoLivre(search, category)
+      : [],
+    site === "Buscapé" || site === "Ambos" ? getBuscape(search, category) : [],
+  ]);
+  const products = _.concat(productsMl, productsBp);
+  if (products.length === 0) {
+    await Search.create({
+      search: search,
+      category: category,
+      site: site,
+    });
+    return {
+      type: null,
+      message: "Not found itens",
+    };
+  }
+  const newSearch = products.map(async (product) => {
+    await Search.create({
+      search: search,
+      category: category,
+      site: site,
+      link: product.link,
+      price: product.price,
+      image: product.image,
+      description: product.description,
+    });
+  });
+  Promise.all(newSearch);
+  return {
+    type: null,
+    message: products,
   };
 };
 
-module.exports = { 
-    getProductsAndPostSearch, 
-    };
+module.exports = {
+  getProductsAndPostSearch,
+};

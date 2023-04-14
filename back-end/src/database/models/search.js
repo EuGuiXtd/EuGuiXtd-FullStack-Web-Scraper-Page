@@ -1,5 +1,7 @@
-module.exports =  (sequelize, DataTypes) => {
-    const Search = sequelize.define('Search', {
+module.exports = (sequelize, DataTypes) => {
+  const Search = sequelize.define(
+    "Search",
+    {
       id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
       search: DataTypes.STRING,
       category: DataTypes.STRING,
@@ -10,10 +12,11 @@ module.exports =  (sequelize, DataTypes) => {
       description: DataTypes.STRING,
     },
     {
-        timestamps: false,
-        underscored: true,
-        force:true,
-      },);
-  
-    return Search;
-  };
+      timestamps: false,
+      underscored: true,
+      force: true,
+    }
+  );
+
+  return Search;
+};
