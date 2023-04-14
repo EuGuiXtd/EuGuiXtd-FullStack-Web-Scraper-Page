@@ -126,7 +126,7 @@ function App() {
           {products.map((product) => (
             <div
               class="card text-center border-info mb-3"
-              style={{ width: "220px", borderRadius: "8px", height: "400px" }}
+              style={{ width: "220px", borderRadius: "8px", height: "450px" }}
             >
               <img
                 class="card-img-top"
