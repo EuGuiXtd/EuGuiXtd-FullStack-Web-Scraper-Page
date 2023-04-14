@@ -1,0 +1,20 @@
+.loader {
+  animation: is-rotating 1s infinite;
+  text-align: center;
+  border: 6px solid #e5e5e5;
+  border-radius: 50%;
+  border-top-color: #17a2b8;
+  height: 50px;
+  width: 50px;
+}
+
+.divloader{
+  display: flex;
+  justify-content: center;
+}
+@keyframes is-rotating {
+  from {
+    transform: rotate(1turn);
+  }
+}
+
