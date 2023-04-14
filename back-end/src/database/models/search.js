@@ -1,10 +1,11 @@
-const SearchModel = (sequelize, DataTypes) => {
+module.exports =  (sequelize, DataTypes) => {
     const Search = sequelize.define('Search', {
       id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
       search: DataTypes.STRING,
+      category: DataTypes.STRING,
       site: DataTypes.STRING(1234),
       link: DataTypes.STRING(1234),
-      price: DataTypes.DECIMAL(10,2),
+      price: DataTypes.STRING,
       image: DataTypes.STRING(1234),
       description: DataTypes.STRING,
     },
@@ -16,5 +17,3 @@ const SearchModel = (sequelize, DataTypes) => {
   
     return Search;
   };
-  
-  module.exports = SearchModel;

@@ -1,5 +1,6 @@
 const puppeteer = require('puppeteer');
 const { scrollPageToBottom } = require('puppeteer-autoscroll-down');
+const { Search } = require('../models');
 const _ = require('lodash');
 
 async function getMercadoLivre(searchStr,category) {
@@ -37,7 +38,7 @@ async function getMercadoLivre(searchStr,category) {
 const links = await page.$$eval('.ui-search-layout__item.shops__layout-item', el => {
   return el.map(link => ({
     link: link.querySelector(".ui-search-link").href,
-    price: link.querySelector(".ui-search-price__second-line.shops__price-second-line").querySelector(".price-tag-fraction").innerHTML,
+    price: `$ ${link.querySelector(".ui-search-price__second-line.shops__price-second-line").querySelector(".price-tag-fraction").innerHTML}`,
     image: link.querySelector("img").getAttribute('src'),
     description: link.querySelector(".ui-search-item__title.shops__item-title").innerHTML
 }));
@@ -86,32 +87,44 @@ async function getBuscape(searchStr,category) {
     return products;
   };
 
-  async function getProducts(searchStr,category) {
-    const products = []
-    const productsMl = await MercadoLivre(searchStr, category);
-    const productsBp = await getBuscape(searchStr, category);
-    products.push(productsMl, productsBp);
-    return {
-        type: null,
-        message: products,
-    }
-  }
 
 
 
 
 const getProductsAndPostSearch = async (search, site, category) => {
-    let [productsMl,productsBp] = await Promise.all([
-        (site === 'Mercado Livre' || site === 'Ambos') ? getMercadoLivre(search, category) : [],
-        (site === 'Buscapé' || site === 'Ambos') ? getBuscape(search, category) : []
-    ])
-    console.log('ML',productsMl.length)
-    console.log('BP',productsBp.length)
-    const products =  _.concat(productsMl,productsBp);
+  const searchVerify = await Search.findAll({
+    where: {
+      search: search,
+      category: category,
+      site: site,
+    }
+  })
+  if(searchVerify.length){ 
     return {
-        type: null,
-        message: products
-    };
+      type: null,
+      message: searchVerify
+    }
+  }
+  let [productsMl,productsBp] = await Promise.all([
+      (site === 'Mercado Livre' || site === 'Ambos') ? getMercadoLivre(search, category) : [],
+      (site === 'Buscapé' || site === 'Ambos') ? getBuscape(search, category) : []
+  ])
+  const products =  _.concat(productsMl,productsBp);
+          const newSearch = products.map(async (product) => { 
+          await Search.create({ 
+              search: search,
+              category: category,
+              site: site,
+              link: product.link,
+              price: product.price,
+              image: product.image,
+              description: product.description }); 
+          }); Promise.all(newSearch);
+          console.log(products);
+  return {
+      type: null,
+      message: products
+  };
 };
 
 module.exports = { 

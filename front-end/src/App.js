@@ -5,9 +5,9 @@ function App() {
 
   const [products, setProducts] = useState([]);
 
-  const [selectCategory, setSelectCategory] = useState('geladeira');
+  const [selectCategory, setSelectCategory] = useState('celular');
 
-  const [selectSite, setSelectSite] = useState('Mercado Livre');
+  const [selectSite, setSelectSite] = useState('Ambos');
 
   const [inputProduct, setInputProduct] = useState('');
   
@@ -53,17 +53,17 @@ function App() {
         onChange={ (e) => setSelectCategory(e.target.value) }
       >
           <option 
-          value={ (selectSite === 'Mercado Livre' || selectSite === 'Buscapé')  ? 'celular' : '' }
+          value='celular'
           >
             Mobile
             </option>
           <option 
-          value={ (selectSite === 'Mercado Livre' || selectSite === 'Buscapé') ? 'geladeira' : '' }
+          value='geladeira' 
           >
             Refrigerator
             </option>
           <option 
-          value={ (selectSite === 'Mercado Livre' || selectSite === 'Buscapé') ? 'tv' : '' }
+          value='tv' 
           >
             TV
             </option>
@@ -81,6 +81,11 @@ function App() {
           value='Buscapé'
           >
             Buscapé
+            </option>
+            <option 
+          value='Ambos'
+          >
+            Todas
             </option>
       </select>
       <label 
@@ -101,21 +106,22 @@ function App() {
       >
         Search
         </button>
-{/*         {
+         {
         (researched)
           ? (
-            products.results.map((product) => (
+            products.map((product) => (
               <section
-              key={ product.id }
+              key={ product.description }
               >
-                {product.price}
-                <a href={product.permalink}>{product.permalink}</a>
-                <img src={product.thumbnail} alt='product thumbnail' />
+                <a href={product.link}>Ir a Web</a>
+                <img src={product.image} alt='product thumbnail' />
+                <p>{product.price}</p>
+                <h2>{product.description}</h2>
                 </section>
             ))
           )
           : null
-      } */}
+      } 
     </div>
   );
 }

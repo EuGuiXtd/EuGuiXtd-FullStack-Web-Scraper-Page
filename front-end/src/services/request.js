@@ -5,7 +5,7 @@ const api = axios.create({
 });
 
 export const getProductsAndPostSearch = async ({ search, site, category }) => {
-  const { data } = await api.get('/products', { search, site, category });
+  const { data } = await api.post('/products', { search, site, category });
 
   return data;
 };

@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('Searchs', {
+    await queryInterface.createTable('searches', {
       id: {
         allowNull: false,
         autoIncrement: true,
@@ -12,6 +12,9 @@ module.exports = {
       search: {
         type: Sequelize.STRING
       },
+      category: {
+        type: Sequelize.STRING
+      },
       site: {
         type: Sequelize.STRING(1234)
       },
@@ -19,18 +22,18 @@ module.exports = {
         type: Sequelize.STRING(1234)
       },
       price: {
-        type: Sequelize.DECIMAL(10, 2)
+        type: Sequelize.STRING
       },
       image: {
         type: Sequelize.STRING(1234)
       },
       description: {
         type: Sequelize.STRING
-      }
+      } 
     });
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('Searchs');
+    await queryInterface.dropTable('searches');
   }
 };
