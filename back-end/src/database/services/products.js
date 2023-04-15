@@ -4,7 +4,7 @@ const { Search } = require("../models");
 const _ = require("lodash");
 
 async function getMercadoLivre(searchStr, category) {
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({args: ['--no-sandbox']});
   const page = await browser.newPage();
   console.log('iniciei');
 
@@ -68,7 +68,7 @@ async function getMercadoLivre(searchStr, category) {
 }
 
 async function getBuscape(searchStr, category) {
-  const browser = await puppeteer.launch();
+  const browser = await puppeteer.launch({args: ['--no-sandbox']});
   const page = await browser.newPage();
   await page.setViewport({ width: 1920, height: 1080 });
   await page.setRequestInterception(true);
