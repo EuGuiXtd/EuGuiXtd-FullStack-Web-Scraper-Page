@@ -6,6 +6,7 @@ const _ = require("lodash");
 async function getMercadoLivre(searchStr, category) {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
+  console.log('iniciei');
 
   await page.setRequestInterception(true);
     
@@ -19,6 +20,7 @@ async function getMercadoLivre(searchStr, category) {
   });
 
   await page.goto(`https://lista.mercadolivre.com.br/${category}`);
+  console.log('fui pra url');
 
 
   const search = ".nav-search-input";
