@@ -32,6 +32,7 @@
 
 /back-end/.DS_Store
 /back-end/.env.local
+/back-end/.env
 /back-end/.env.development.local
 /back-end/.env.test.local
 /back-end/.env.production.local
