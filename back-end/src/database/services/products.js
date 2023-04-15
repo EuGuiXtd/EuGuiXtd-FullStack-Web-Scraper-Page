@@ -7,9 +7,19 @@ async function getMercadoLivre(searchStr, category) {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
 
+  await page.setRequestInterception(true);
+    
+  page.on('request', (req) => {
+      if(req.resourceType() == 'stylesheet' || req.resourceType() == 'font' || req.resourceType() == 'image'){
+          req.abort();
+      }
+      else {
+          req.continue();
+      }
+  });
+
   await page.goto(`https://lista.mercadolivre.com.br/${category}`);
 
-  await page.setViewport({ width: 1080, height: 1024 });
 
   const search = ".nav-search-input";
   const searchBtn = ".nav-search-btn";
@@ -25,10 +35,10 @@ async function getMercadoLivre(searchStr, category) {
   await page.type(search, searchStr);
   await Promise.all([page.waitForNavigation(), await page.click(searchBtn)]);
 
-  await scrollPageToBottom(page, {
+/*   await scrollPageToBottom(page, {
     size: 250,
     delay: 250,
-  });
+  }); */
 
   const links = await page.$$eval(
     category === "tv"
@@ -44,7 +54,7 @@ async function getMercadoLivre(searchStr, category) {
             )
             .querySelector(".price-tag-fraction").innerHTML
         }`,
-        image: link.querySelector("img").getAttribute("src"),
+        image: link.querySelector("img").getAttribute("data-src"),
         description: link.querySelector(
           ".ui-search-item__title.shops__item-title"
         ).innerHTML,
@@ -58,10 +68,20 @@ async function getMercadoLivre(searchStr, category) {
 async function getBuscape(searchStr, category) {
   const browser = await puppeteer.launch();
   const page = await browser.newPage();
+  await page.setViewport({ width: 1920, height: 1080 });
+  await page.setRequestInterception(true);
+    
+  page.on('request', (req) => {
+      if(req.resourceType() == 'stylesheet' || req.resourceType() == 'font' || req.resourceType() == 'image'){
+          req.abort();
+      }
+      else {
+          req.continue();
+      }
+  });
 
   await page.goto("https://www.buscape.com.br/");
 
-  await page.setViewport({ width: 1280, height: 926 });
 
   const selectCategory = ".Dropdown_DropdownHeader__N3Zqc";
   const input =
@@ -82,11 +102,11 @@ async function getBuscape(searchStr, category) {
   await page.type(input, searchStr);
   await page.focus(input);
   await Promise.all([page.waitForNavigation(), page.keyboard.press("Enter")]);
-
   await scrollPageToBottom(page, {
     size: 250,
     delay: 250,
   });
+
 
   const products = await page.$$eval(
     ".SearchCard_ProductCard_Inner__7JhKb",
