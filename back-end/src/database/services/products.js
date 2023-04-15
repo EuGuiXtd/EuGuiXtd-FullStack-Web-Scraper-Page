@@ -92,8 +92,9 @@ async function getBuscape(searchStr, category) {
         ? process.env.PUPPETEER_EXECUTABLE_PATH
         : puppeteer.executablePath(),
   });
-  console.log('iniciei');
   const page = await browser.newPage();
+  console.log('iniciei');
+
   await page.setRequestInterception(true);
     
   page.on('request', (req) => {
@@ -105,7 +106,7 @@ async function getBuscape(searchStr, category) {
       }
   });
 
-  await page.goto("https://www.buscape.com.br/");
+  await page.goto("https://www.buscape.com.br/", {timeout: 0});
   console.log('fui pra url');
 
 
