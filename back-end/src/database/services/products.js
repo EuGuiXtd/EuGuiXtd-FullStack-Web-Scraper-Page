@@ -31,7 +31,7 @@ async function getMercadoLivre(searchStr, category) {
       }
   });
 
-  await page.goto(`https://lista.mercadolivre.com.br/${category}`);
+  await page.goto(`https://lista.mercadolivre.com.br/${category}`, {timeout: 0});
   console.log('fui pra url');
 
 
