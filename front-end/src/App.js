@@ -126,7 +126,7 @@ function App() {
           {products.map((product) => (
             <div
               class="card text-center border-info mb-3"
-              style={{ width: "220px", borderRadius: "8px", height: "450px" }}
+              style={{ width: "220px", borderRadius: "8px", height: "470px" }}
             >
               <img
                 class="card-img-top"
@@ -138,6 +138,9 @@ function App() {
                 <h5 class="card-title">{product.price}</h5>
                 <p class="card-text" style={{ height: "100px" }}>
                   {product.description}
+                </p>
+                <p >
+                  {`site: ${product.web}`}
                 </p>
                 <a
                   href={product.link}

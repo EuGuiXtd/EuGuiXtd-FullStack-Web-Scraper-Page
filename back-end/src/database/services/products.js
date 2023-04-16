@@ -5,6 +5,7 @@ const _ = require("lodash");
 require('dotenv').config();
 
 async function getMercadoLivre(searchStr, category) {
+  console.time();
   const browser = await puppeteer.launch({
     args: [
       "--disable-setuid-sandbox",
@@ -17,11 +18,12 @@ async function getMercadoLivre(searchStr, category) {
         ? process.env.PUPPETEER_EXECUTABLE_PATH
         : puppeteer.executablePath(),
   });
+  console.timeLog(); console.log('Etapa 1');
   const page = await browser.newPage();
-  console.log('iniciei');
+  console.timeLog(); console.log('Etapa 2');  console.log('iniciei');
 
   await page.setRequestInterception(true);
-    
+  console.timeLog(); console.log('Etapa 3');
   page.on('request', (req) => {
       if(req.resourceType() == 'stylesheet' || req.resourceType() == 'font' || req.resourceType() == 'image'){
           req.abort();
@@ -32,7 +34,7 @@ async function getMercadoLivre(searchStr, category) {
   });
 
   await page.goto(`https://lista.mercadolivre.com.br/${category}`, {timeout: 0});
-  console.log('fui pra url');
+  console.timeLog(); console.log('Etapa 4'); console.log('fui pra url');
 
 
   const search = ".nav-search-input";
@@ -40,6 +42,7 @@ async function getMercadoLivre(searchStr, category) {
   const check = "p > input";
 
   await page.waitForSelector(search);
+  console.timeLog(); console.log('Etapa 5');
 
   await page.click(check);
   await page.focus(search);
@@ -48,11 +51,7 @@ async function getMercadoLivre(searchStr, category) {
   await page.keyboard.up("Control");
   await page.type(search, searchStr);
   await Promise.all([page.waitForNavigation(), await page.click(searchBtn)]);
-
-/*   await scrollPageToBottom(page, {
-    size: 250,
-    delay: 250,
-  }); */
+  console.timeLog(); console.log('Etapa 6'); console.log('mudei de  url');
 
   const links = await page.$$eval(
     category === "tv"
@@ -72,9 +71,11 @@ async function getMercadoLivre(searchStr, category) {
         description: link.querySelector(
           ".ui-search-item__title.shops__item-title"
         ).innerHTML,
+        web: document.querySelector(".nav-footer-hp").innerHTML,
       }));
     }
   );
+  console.timeLog(); console.log('Etapa 6');
   await browser.close();
   return links;
 }
@@ -145,6 +146,7 @@ async function getBuscape(searchStr, category) {
         ).innerHTML,
         image: product.querySelector("img").getAttribute("src"),
         description: product.querySelector("h2").innerHTML,
+        web: document.querySelector(".brand-region__anchor").title
       }));
     }
   );
@@ -199,6 +201,7 @@ const getProductsAndPostSearch = async (search, site, category) => {
       price: product.price,
       image: product.image,
       description: product.description,
+      web: product.web,
     });
   });
   Promise.all(newSearch);

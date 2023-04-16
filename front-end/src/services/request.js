@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: `https://lex-art-test-back-end.onrender.com/`,
+  baseURL: `http://localhost:3001`,
 });
 
 export const getProductsAndPostSearch = async ({ search, site, category }) => {
