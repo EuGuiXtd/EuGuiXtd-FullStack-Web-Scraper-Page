@@ -18,12 +18,12 @@ async function getMercadoLivre(searchStr, category) {
         ? process.env.PUPPETEER_EXECUTABLE_PATH
         : puppeteer.executablePath(),
   });
-  console.timeLog(); console.log('Etapa 1');
+  console.log('Etapa 1'); console.timeLog(); 
   const page = await browser.newPage();
-  console.timeLog(); console.log('Etapa 2');  console.log('iniciei');
+  console.log('Etapa 2'); console.timeLog(); console.log('iniciei');
 
   await page.setRequestInterception(true);
-  console.timeLog(); console.log('Etapa 3');
+  console.log('Etapa 3'); console.timeLog(); 
   page.on('request', (req) => {
       if(req.resourceType() == 'stylesheet' || req.resourceType() == 'font' || req.resourceType() == 'image'){
           req.abort();
@@ -34,7 +34,7 @@ async function getMercadoLivre(searchStr, category) {
   });
 
   await page.goto(`https://lista.mercadolivre.com.br/${category}`, {timeout: 0});
-  console.timeLog(); console.log('Etapa 4'); console.log('fui pra url');
+  console.log('Etapa 4');  console.timeLog(); console.log('fui pra url');
 
 
   const search = ".nav-search-input";
@@ -42,7 +42,7 @@ async function getMercadoLivre(searchStr, category) {
   const check = "p > input";
 
   await page.waitForSelector(search);
-  console.timeLog(); console.log('Etapa 5');
+  console.log('Etapa 5'); console.timeLog();
 
   await page.click(check);
   await page.focus(search);
@@ -51,7 +51,7 @@ async function getMercadoLivre(searchStr, category) {
   await page.keyboard.up("Control");
   await page.type(search, searchStr);
   await Promise.all([page.waitForNavigation(), await page.click(searchBtn)]);
-  console.timeLog(); console.log('Etapa 6'); console.log('mudei de  url');
+  console.log('Etapa 6'); console.timeLog();  console.log('mudei de  url');
 
   const links = await page.$$eval(
     category === "tv"
@@ -75,7 +75,7 @@ async function getMercadoLivre(searchStr, category) {
       }));
     }
   );
-  console.timeLog(); console.log('Etapa 6');
+ console.log('Etapa 7'); console.timeLog(); 
   await browser.close();
   return links;
 }
