@@ -30,6 +30,9 @@ module.exports = {
       description: {
         type: Sequelize.STRING,
       },
+      web: {
+        type: Sequelize.STRING,
+      },
     });
   },
 
