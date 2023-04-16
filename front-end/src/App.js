@@ -97,6 +97,11 @@ function App() {
               placeholder="Search for products here"
               value={inputProduct}
               onChange={handleInputProduct}
+              onKeyPress={(event) => {
+                if (event.key ==='Enter') {
+                  newSale(event)}
+                }
+              }
             />
             <button
               type="button"
@@ -126,13 +131,13 @@ function App() {
           {products.map((product) => (
             <div
               class="card text-center border-info mb-3"
-              style={{ width: "220px", borderRadius: "8px", height: "470px" }}
+              style={{ width: "220px", borderRadius: "8px" }}
             >
               <img
                 class="card-img-top"
                 src={product.image}
                 alt="Imagem de capa do card"
-                style={{ width: "100%", height: "200px", padding: "30px" }}
+                style={{ maxHeight: "400px", padding: "30px" }}
               />
               <div class="card-body">
                 <h5 class="card-title">{product.price}</h5>
