@@ -52,6 +52,7 @@ function App() {
       console.log(error);
     }
   };
+  console.log(selectSite);
   return (
     <div>
       <ul class="nav justify-content-center" style={{ paddingBottom: "15px" }}>
@@ -62,7 +63,7 @@ function App() {
             class="nav-link active"
             style={{ border: "1px solid #17a2b8", marginRight: "0.5rem", cursor: "pointer" }}
           >
-            <option>Categoria</option>
+            <option value=''>Categoria</option>
             <option value="celular">Mobile</option>
             <option value="geladeira">Refrigerator</option>
             <option value="tv">TV</option>
@@ -75,7 +76,7 @@ function App() {
             class="nav-link"
             style={{ border: "1px solid #17a2b8", cursor: "pointer" }}
           >
-            <option>Web</option>
+            <option value=''>Web</option>
             <option value="Ambos">Both</option>
             <option value="Mercado Livre">Mercado Livre</option>
             <option value="Buscapé">Buscapé</option>
