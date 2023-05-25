@@ -77,7 +77,7 @@ async function getMercadoLivre(searchStr, category) {
 
 async function getBuscape(searchStr, category) {
   const browser = await puppeteer.launch({
-    args: [
+    args:[
       "--disable-setuid-sandbox",
       "--no-sandbox",
       "--single-process",
