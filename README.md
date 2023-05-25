@@ -1,4 +1,4 @@
-# Guilherme Durães Pereira - FullStack Test - Software:
+# Guilherme Durães Pereira - FullStack Web Scraper Page:
 
 # Contexto:
 Aplicação para uma busca simples de podutos no Mercado Livre e no Buscapé ou nos dois ao mesmo tempo, utilizando web scraping para  extração de dados.
